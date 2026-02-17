@@ -14,16 +14,290 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bet_history: {
+        Row: {
+          bet_amount: number
+          created_at: string
+          game_id: string | null
+          id: string
+          result: string
+          user_id: string
+          win_amount: number
+        }
+        Insert: {
+          bet_amount: number
+          created_at?: string
+          game_id?: string | null
+          id?: string
+          result?: string
+          user_id: string
+          win_amount?: number
+        }
+        Update: {
+          bet_amount?: number
+          created_at?: string
+          game_id?: string | null
+          id?: string
+          result?: string
+          user_id?: string
+          win_amount?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bet_history_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deposits: {
+        Row: {
+          admin_note: string | null
+          amount: number
+          created_at: string
+          id: string
+          payment_method: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          transaction_id: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          amount: number
+          created_at?: string
+          id?: string
+          payment_method: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          transaction_id: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_method?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          transaction_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      games: {
+        Row: {
+          category: string[]
+          created_at: string
+          id: string
+          image_url: string
+          is_active: boolean
+          max_bet: number
+          name: string
+          provider: string
+          sort_order: number
+        }
+        Insert: {
+          category?: string[]
+          created_at?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          max_bet?: number
+          name: string
+          provider?: string
+          sort_order?: number
+        }
+        Update: {
+          category?: string[]
+          created_at?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          max_bet?: number
+          name?: string
+          provider?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      notices: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          title: string
+          type: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          title: string
+          type?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          balance: number
+          ban_reason: string | null
+          bonus_balance: number
+          created_at: string
+          device_info: string | null
+          full_name: string
+          id: string
+          ip_address: string | null
+          is_banned: boolean
+          phone: string
+          referral_code: string | null
+          referred_by: string | null
+          total_deposit: number
+          total_earnings: number
+          total_loss: number
+          total_withdraw: number
+          turnover: number
+          turnover_required: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          ban_reason?: string | null
+          bonus_balance?: number
+          created_at?: string
+          device_info?: string | null
+          full_name?: string
+          id?: string
+          ip_address?: string | null
+          is_banned?: boolean
+          phone?: string
+          referral_code?: string | null
+          referred_by?: string | null
+          total_deposit?: number
+          total_earnings?: number
+          total_loss?: number
+          total_withdraw?: number
+          turnover?: number
+          turnover_required?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          ban_reason?: string | null
+          bonus_balance?: number
+          created_at?: string
+          device_info?: string | null
+          full_name?: string
+          id?: string
+          ip_address?: string | null
+          is_banned?: boolean
+          phone?: string
+          referral_code?: string | null
+          referred_by?: string | null
+          total_deposit?: number
+          total_earnings?: number
+          total_loss?: number
+          total_withdraw?: number
+          turnover?: number
+          turnover_required?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      withdrawals: {
+        Row: {
+          account_number: string
+          admin_note: string | null
+          amount: number
+          created_at: string
+          id: string
+          payment_method: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          account_number: string
+          admin_note?: string | null
+          amount: number
+          created_at?: string
+          id?: string
+          payment_method: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          account_number?: string
+          admin_note?: string | null
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_method?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +424,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
