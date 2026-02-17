@@ -1,0 +1,104 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Eye, EyeOff, Smartphone, User, Lock } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+const Register = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [form, setForm] = useState({ name: "", phone: "", password: "", confirmPassword: "", referral: "" });
+
+  const update = (key: string, value: string) => setForm((f) => ({ ...f, [key]: value }));
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-6 py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-sm"
+      >
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-gold flex items-center justify-center mx-auto mb-4 shadow-gold">
+            <span className="font-display text-xl font-bold text-primary-foreground">OB</span>
+          </div>
+          <h1 className="font-display text-2xl font-bold text-gradient-gold tracking-wider">
+            নিবন্ধন করুন
+          </h1>
+          <p className="text-muted-foreground text-sm mt-1">নতুন অ্যাকাউন্ট তৈরি করুন</p>
+        </div>
+
+        <div className="space-y-3">
+          <div className="relative">
+            <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="পূর্ণ নাম"
+              value={form.name}
+              onChange={(e) => update("name", e.target.value)}
+              className="pl-10 bg-secondary border-border focus:border-primary h-12 text-foreground"
+            />
+          </div>
+
+          <div className="relative">
+            <Smartphone size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="tel"
+              placeholder="মোবাইল নম্বর (01XXXXXXXXX)"
+              value={form.phone}
+              onChange={(e) => update("phone", e.target.value)}
+              className="pl-10 bg-secondary border-border focus:border-primary h-12 text-foreground"
+            />
+          </div>
+
+          <div className="relative">
+            <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type={showPassword ? "text" : "password"}
+              placeholder="পাসওয়ার্ড"
+              value={form.password}
+              onChange={(e) => update("password", e.target.value)}
+              className="pl-10 pr-10 bg-secondary border-border focus:border-primary h-12 text-foreground"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          <Input
+            type="password"
+            placeholder="পাসওয়ার্ড নিশ্চিত করুন"
+            value={form.confirmPassword}
+            onChange={(e) => update("confirmPassword", e.target.value)}
+            className="bg-secondary border-border focus:border-primary h-12 text-foreground"
+          />
+
+          <Input
+            placeholder="রেফারেল কোড (ঐচ্ছিক)"
+            value={form.referral}
+            onChange={(e) => update("referral", e.target.value)}
+            className="bg-secondary border-border focus:border-primary h-12 text-foreground"
+          />
+
+          <Button className="w-full h-12 bg-gradient-gold text-primary-foreground font-display font-bold text-base shadow-gold hover:opacity-90 transition-opacity">
+            নিবন্ধন করুন
+          </Button>
+        </div>
+
+        <div className="mt-6 text-center">
+          <p className="text-muted-foreground text-sm">
+            ইতিমধ্যে অ্যাকাউন্ট আছে?{" "}
+            <Link to="/login" className="text-primary font-semibold hover:underline">
+              লগইন করুন
+            </Link>
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+export default Register;
