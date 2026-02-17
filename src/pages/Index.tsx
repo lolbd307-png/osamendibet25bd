@@ -5,6 +5,7 @@ import HeroBanner from "@/components/HeroBanner";
 import QuickActions from "@/components/QuickActions";
 import CategoryTabs from "@/components/CategoryTabs";
 import GameGrid from "@/components/GameGrid";
+import NoticeBar from "@/components/NoticeBar";
 
 const Index = () => {
   const [activeCategory, setActiveCategory] = useState("hot");
@@ -13,12 +14,10 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main>
+        <NoticeBar />
         <HeroBanner />
         <QuickActions />
-        <CategoryTabs
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
-        />
+        <CategoryTabs activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
         <GameGrid category={activeCategory} />
       </main>
       <BottomNav />
