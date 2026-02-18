@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface GameCardProps {
   name: string;
@@ -9,12 +10,34 @@ interface GameCardProps {
   index: number;
 }
 
+const gameRouteMap: Record<string, string> = {
+  "Aviator": "/game/crash",
+  "Crash Rocket": "/game/crash",
+  "Speed Crash": "/game/crash",
+  "JetX": "/game/crash",
+  "Spaceman": "/game/crash",
+  "Lucky Dice": "/game/dice",
+  "Golden Dice": "/game/dice",
+  "Dice Roll": "/game/dice",
+  "Dice Duel": "/game/dice",
+  "Mines Gold": "/game/mines",
+  "Mine Strike": "/game/mines",
+};
+
 const GameCard = ({ name, image, provider, maxBet, index }: GameCardProps) => {
+  const navigate = useNavigate();
+  const route = gameRouteMap[name];
+
+  const handleClick = () => {
+    if (route) navigate(route);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.03 }}
+      onClick={handleClick}
       className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary/50 transition-all cursor-pointer hover:shadow-gold"
     >
       <div className="aspect-square relative overflow-hidden">
