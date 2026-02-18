@@ -11,6 +11,9 @@ import Deposit from "./pages/Deposit";
 import Withdraw from "./pages/Withdraw";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
+import GameCrash from "./pages/GameCrash";
+import GameDice from "./pages/GameDice";
+import GameMines from "./pages/GameMines";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +33,9 @@ const App = () => (
             <Route path="/withdraw" element={<Withdraw />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<Admin />} />
+            <Route path="/game/crash" element={<GameCrash />} />
+            <Route path="/game/dice" element={<GameDice />} />
+            <Route path="/game/mines" element={<GameMines />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
