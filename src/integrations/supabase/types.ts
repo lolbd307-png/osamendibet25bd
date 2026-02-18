@@ -52,6 +52,27 @@ export type Database = {
           },
         ]
       }
+      daily_bonuses: {
+        Row: {
+          amount: number
+          claimed_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          claimed_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          claimed_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       deposits: {
         Row: {
           admin_note: string | null
@@ -169,6 +190,7 @@ export type Database = {
           ip_address: string | null
           is_banned: boolean
           phone: string
+          referral_bonus: number
           referral_code: string | null
           referred_by: string | null
           total_deposit: number
@@ -191,6 +213,7 @@ export type Database = {
           ip_address?: string | null
           is_banned?: boolean
           phone?: string
+          referral_bonus?: number
           referral_code?: string | null
           referred_by?: string | null
           total_deposit?: number
@@ -213,6 +236,7 @@ export type Database = {
           ip_address?: string | null
           is_banned?: boolean
           phone?: string
+          referral_bonus?: number
           referral_code?: string | null
           referred_by?: string | null
           total_deposit?: number

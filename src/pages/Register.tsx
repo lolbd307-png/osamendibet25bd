@@ -36,6 +36,21 @@ const Register = () => {
     if (error) {
       toast.error(error.message || "নিবন্ধন ব্যর্থ হয়েছে");
     } else {
+      // If referral code provided, save it after profile is created
+      if (form.referral.trim()) {
+        // Will be linked on first login when profile exists
+        setTimeout(async () => {
+          try {
+            const { data: session } = await (await import("@/integrations/supabase/client")).supabase.auth.getSession();
+            if (session?.session?.user) {
+              await (await import("@/integrations/supabase/client")).supabase
+                .from("profiles")
+                .update({ referred_by: form.referral.trim().toUpperCase() })
+                .eq("user_id", session.session.user.id);
+            }
+          } catch {}
+        }, 2000);
+      }
       toast.success("নিবন্ধন সফল! ইমেইল ভেরিফাই করুন।");
       navigate("/login");
     }

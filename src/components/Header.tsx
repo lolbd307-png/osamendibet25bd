@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Bell, User, Wallet } from "lucide-react";
+import { User, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,7 +10,7 @@ const Header = () => {
 
   useEffect(() => {
     if (user) {
-      supabase.from("profiles").select("balance").eq("user_id", user.id).single()
+      supabase.from("profiles").select("balance").eq("user_id", user.id).maybeSingle()
         .then(({ data }) => setBalance(data?.balance || 0));
     }
   }, [user]);
