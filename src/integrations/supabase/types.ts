@@ -112,6 +112,39 @@ export type Database = {
         }
         Relationships: []
       }
+      game_sessions: {
+        Row: {
+          bet_amount: number
+          created_at: string
+          game_state: Json
+          game_type: string
+          id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bet_amount: number
+          created_at?: string
+          game_state?: Json
+          game_type: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bet_amount?: number
+          created_at?: string
+          game_state?: Json
+          game_type?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       games: {
         Row: {
           category: string[]
@@ -250,6 +283,30 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_claims: {
+        Row: {
+          bonus_paid: number
+          claimed_at: string
+          id: string
+          referred_id: string
+          referrer_id: string
+        }
+        Insert: {
+          bonus_paid?: number
+          claimed_at?: string
+          id?: string
+          referred_id: string
+          referrer_id: string
+        }
+        Update: {
+          bonus_paid?: number
+          claimed_at?: string
+          id?: string
+          referred_id?: string
+          referrer_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -309,7 +366,72 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      profiles_safe: {
+        Row: {
+          balance: number | null
+          ban_reason: string | null
+          bonus_balance: number | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+          is_banned: boolean | null
+          phone: string | null
+          referral_bonus: number | null
+          referral_code: string | null
+          referred_by: string | null
+          total_deposit: number | null
+          total_earnings: number | null
+          total_loss: number | null
+          total_withdraw: number | null
+          turnover: number | null
+          turnover_required: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          balance?: number | null
+          ban_reason?: string | null
+          bonus_balance?: number | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_banned?: boolean | null
+          phone?: string | null
+          referral_bonus?: number | null
+          referral_code?: string | null
+          referred_by?: string | null
+          total_deposit?: number | null
+          total_earnings?: number | null
+          total_loss?: number | null
+          total_withdraw?: number | null
+          turnover?: number | null
+          turnover_required?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          balance?: number | null
+          ban_reason?: string | null
+          bonus_balance?: number | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_banned?: boolean | null
+          phone?: string | null
+          referral_bonus?: number | null
+          referral_code?: string | null
+          referred_by?: string | null
+          total_deposit?: number | null
+          total_earnings?: number | null
+          total_loss?: number | null
+          total_withdraw?: number | null
+          turnover?: number | null
+          turnover_required?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {
