@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useBalance } from "@/hooks/useBalance";
 import { toast } from "sonner";
 
-type Cell = { revealed: boolean; isMine: boolean };
+type CellState = "hidden" | "gem" | "mine";
 const GRID_SIZE = 25;
 
 const GameMines = () => {
@@ -16,13 +16,15 @@ const GameMines = () => {
   const { balance, placeBet } = useBalance();
   const [betAmount, setBetAmount] = useState(100);
   const [mineCount, setMineCount] = useState(5);
-  const [grid, setGrid] = useState<Cell[]>([]);
+  const [grid, setGrid] = useState<CellState[]>(Array(GRID_SIZE).fill("hidden"));
   const [isPlaying, setIsPlaying] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [cashedOut, setCashedOut] = useState(false);
   const [revealedCount, setRevealedCount] = useState(0);
   const [betLoading, setBetLoading] = useState(false);
   const [currentBet, setCurrentBet] = useState(0);
+  const [sessionId, setSessionId] = useState("");
+  const [revealing, setRevealing] = useState(false);
 
   const safeCount = GRID_SIZE - mineCount;
   const currentMultiplier = revealedCount === 0
@@ -37,12 +39,8 @@ const GameMines = () => {
     setBetLoading(true);
     try {
       const data = await placeBet({ action: "mines_start", bet_amount: betAmount, mine_count: mineCount });
-      const mineSet = new Set<number>(data.mines);
-      const newGrid: Cell[] = Array.from({ length: GRID_SIZE }, (_, i) => ({
-        revealed: false,
-        isMine: mineSet.has(i),
-      }));
-      setGrid(newGrid);
+      setSessionId(data.session_id);
+      setGrid(Array(GRID_SIZE).fill("hidden"));
       setCurrentBet(betAmount);
       setIsPlaying(true);
       setGameOver(false);
@@ -55,35 +53,54 @@ const GameMines = () => {
   };
 
   const revealCell = useCallback(
-    (index: number) => {
-      if (!isPlaying || gameOver || grid[index].revealed) return;
-      const newGrid = [...grid];
-      newGrid[index] = { ...newGrid[index], revealed: true };
+    async (index: number) => {
+      if (!isPlaying || gameOver || revealing || grid[index] !== "hidden") return;
 
-      if (newGrid[index].isMine) {
-        const finalGrid = newGrid.map((c) => (c.isMine ? { ...c, revealed: true } : c));
-        setGrid(finalGrid);
-        setGameOver(true);
-        setIsPlaying(false);
-        placeBet({ action: "mines_lost", bet_amount: currentBet }).catch(() => {});
-      } else {
-        setGrid(newGrid);
-        setRevealedCount((prev) => prev + 1);
+      setRevealing(true);
+      try {
+        // Send reveal request to server - server validates
+        const data = await placeBet({ action: "mines_reveal", session_id: sessionId, cell_index: index });
+
+        const newGrid = [...grid];
+        if (data.is_mine) {
+          // Hit a mine - server returns all mine positions
+          newGrid[index] = "mine";
+          const mines: number[] = data.mines || [];
+          mines.forEach((m: number) => { newGrid[m] = "mine"; });
+          setGrid(newGrid);
+          setGameOver(true);
+          setIsPlaying(false);
+        } else {
+          newGrid[index] = "gem";
+          setGrid(newGrid);
+          setRevealedCount(data.revealed_count);
+        }
+      } catch (err: any) {
+        toast.error(err.message);
       }
+      setRevealing(false);
     },
-    [grid, isPlaying, gameOver, placeBet, currentBet]
+    [grid, isPlaying, gameOver, placeBet, sessionId, revealing]
   );
 
   const cashOut = async () => {
     if (!isPlaying || revealedCount === 0) return;
     setCashedOut(true);
     setIsPlaying(false);
-    setGrid((prev) => prev.map((c) => (c.isMine ? { ...c, revealed: true } : c)));
     try {
-      await placeBet({ action: "mines_cashout", bet_amount: currentBet, multiplier: currentMultiplier });
-      toast.success(`+৳${payout} জিতেছেন!`);
+      const data = await placeBet({ action: "mines_cashout", session_id: sessionId });
+      // Server returns mine positions on cashout
+      const mines: number[] = data.mines || [];
+      setGrid((prev) => {
+        const newGrid = [...prev];
+        mines.forEach((m: number) => { newGrid[m] = "mine"; });
+        return newGrid;
+      });
+      toast.success(`+৳${data.win_amount} জিতেছেন!`);
     } catch (err: any) {
       toast.error(err.message);
+      setCashedOut(false);
+      setIsPlaying(true);
     }
   };
 
@@ -125,31 +142,30 @@ const GameMines = () => {
         )}
 
         <div className="grid grid-cols-5 gap-2 max-w-sm mx-auto">
-          {(grid.length > 0 ? grid : Array.from({ length: GRID_SIZE }, () => ({ revealed: false, isMine: false }))).map(
-            (cell, i) => (
-              <motion.button
-                key={i}
-                whileTap={isPlaying && !cell.revealed ? { scale: 0.9 } : {}}
-                onClick={() => revealCell(i)}
-                disabled={!isPlaying || cell.revealed}
-                className={`aspect-square rounded-xl flex items-center justify-center transition-all text-lg font-bold ${
-                  cell.revealed
-                    ? cell.isMine ? "bg-neon-red/20 border-2 border-neon-red" : "bg-neon-green/20 border-2 border-neon-green"
-                    : isPlaying ? "bg-secondary border border-border hover:border-primary/50 hover:bg-secondary/80 cursor-pointer" : "bg-secondary border border-border"
-                }`}
-              >
-                <AnimatePresence mode="wait">
-                  {cell.revealed ? (
-                    <motion.div key="revealed" initial={{ scale: 0, rotateY: 180 }} animate={{ scale: 1, rotateY: 0 }} transition={{ type: "spring", stiffness: 300 }}>
-                      {cell.isMine ? <Bomb size={24} className="text-neon-red" /> : <Gem size={24} className="text-neon-green" />}
-                    </motion.div>
-                  ) : isPlaying ? (
-                    <motion.div key="hidden" className="w-3 h-3 rounded-full bg-muted-foreground/30" />
-                  ) : null}
-                </AnimatePresence>
-              </motion.button>
-            )
-          )}
+          {grid.map((cell, i) => (
+            <motion.button
+              key={i}
+              whileTap={isPlaying && cell === "hidden" ? { scale: 0.9 } : {}}
+              onClick={() => revealCell(i)}
+              disabled={!isPlaying || cell !== "hidden" || revealing}
+              className={`aspect-square rounded-xl flex items-center justify-center transition-all text-lg font-bold ${
+                cell === "mine" ? "bg-neon-red/20 border-2 border-neon-red"
+                : cell === "gem" ? "bg-neon-green/20 border-2 border-neon-green"
+                : isPlaying ? "bg-secondary border border-border hover:border-primary/50 hover:bg-secondary/80 cursor-pointer"
+                : "bg-secondary border border-border"
+              }`}
+            >
+              <AnimatePresence mode="wait">
+                {cell !== "hidden" ? (
+                  <motion.div key="revealed" initial={{ scale: 0, rotateY: 180 }} animate={{ scale: 1, rotateY: 0 }} transition={{ type: "spring", stiffness: 300 }}>
+                    {cell === "mine" ? <Bomb size={24} className="text-neon-red" /> : <Gem size={24} className="text-neon-green" />}
+                  </motion.div>
+                ) : isPlaying ? (
+                  <motion.div key="hidden" className="w-3 h-3 rounded-full bg-muted-foreground/30" />
+                ) : null}
+              </AnimatePresence>
+            </motion.button>
+          ))}
         </div>
 
         <AnimatePresence>

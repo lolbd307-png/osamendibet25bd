@@ -21,7 +21,7 @@ const GameCrash = () => {
   const [betLoading, setBetLoading] = useState(false);
   const animRef = useRef<number>(0);
   const startTime = useRef(0);
-  const crashPoint = useRef(0);
+  const sessionId = useRef<string>("");
   const currentBet = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -66,18 +66,27 @@ const GameCrash = () => {
     }
   }, []);
 
+  // Client-side animation uses a random local crash point for visual only
+  // Server validates the actual crash point
+  const localCrashRef = useRef(0);
+
   const animate = useCallback(() => {
     const elapsed = (Date.now() - startTime.current) / 1000;
     const newMult = Math.floor(Math.pow(Math.E, elapsed * 0.15) * 100) / 100;
 
-    if (newMult >= crashPoint.current) {
-      setMultiplier(crashPoint.current);
+    if (newMult >= localCrashRef.current) {
+      setMultiplier(localCrashRef.current);
       setIsCrashed(true);
       setIsPlaying(false);
-      drawGraph(crashPoint.current, true);
-      setHistory((prev) => [{ mult: crashPoint.current, win: false }, ...prev.slice(0, 19)]);
-      // Record loss
-      placeBet({ action: "crash_lost", bet_amount: currentBet.current }).catch(() => {});
+      drawGraph(localCrashRef.current, true);
+      setHistory((prev) => [{ mult: localCrashRef.current, win: false }, ...prev.slice(0, 19)]);
+      // Record loss - server reveals actual crash point
+      placeBet({ action: "crash_lost", session_id: sessionId.current, bet_amount: currentBet.current }).then((data) => {
+        if (data?.crash_point) {
+          // Update display with actual server crash point
+          setMultiplier(data.crash_point);
+        }
+      }).catch(() => {});
       return;
     }
 
@@ -93,7 +102,10 @@ const GameCrash = () => {
     setBetLoading(true);
     try {
       const data = await placeBet({ action: "crash_start", bet_amount: betAmount });
-      crashPoint.current = data.crash_point;
+      sessionId.current = data.session_id;
+      // Generate a local visual crash point (server has the real one)
+      const r = Math.random();
+      localCrashRef.current = Math.max(1.0, Math.floor((1 / (1 - r)) * 100) / 100);
       currentBet.current = betAmount;
       setMultiplier(1.0);
       setIsPlaying(true);
@@ -117,10 +129,13 @@ const GameCrash = () => {
     setIsPlaying(false);
     setHistory((prev) => [{ mult, win: true }, ...prev.slice(0, 19)]);
     try {
-      await placeBet({ action: "crash_cashout", bet_amount: currentBet.current, multiplier: mult });
-      toast.success(`+৳${Math.floor(currentBet.current * mult)} জিতেছেন!`);
+      const data = await placeBet({ action: "crash_cashout", session_id: sessionId.current, bet_amount: currentBet.current, multiplier: mult });
+      toast.success(`+৳${data.win_amount} জিতেছেন!`);
     } catch (err: any) {
+      // Server rejected cashout (multiplier >= crash point)
       toast.error(err.message);
+      setCashedOut(false);
+      setIsCrashed(true);
     }
   };
 
