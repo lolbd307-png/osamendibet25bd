@@ -14,6 +14,10 @@ import Admin from "./pages/Admin";
 import GameCrash from "./pages/GameCrash";
 import GameDice from "./pages/GameDice";
 import GameMines from "./pages/GameMines";
+import GameWheel from "./pages/GameWheel";
+import GamePlinko from "./pages/GamePlinko";
+import GameTower from "./pages/GameTower";
+import GameKeno from "./pages/GameKeno";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +40,10 @@ const App = () => (
             <Route path="/game/crash" element={<GameCrash />} />
             <Route path="/game/dice" element={<GameDice />} />
             <Route path="/game/mines" element={<GameMines />} />
+            <Route path="/game/wheel" element={<GameWheel />} />
+            <Route path="/game/plinko" element={<GamePlinko />} />
+            <Route path="/game/tower" element={<GameTower />} />
+            <Route path="/game/keno" element={<GameKeno />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
