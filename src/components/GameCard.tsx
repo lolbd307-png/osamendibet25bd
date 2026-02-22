@@ -11,17 +11,54 @@ interface GameCardProps {
 }
 
 const gameRouteMap: Record<string, string> = {
-  "Aviator": "/game/crash",
-  "Crash Rocket": "/game/crash",
-  "Speed Crash": "/game/crash",
-  "JetX": "/game/crash",
-  "Spaceman": "/game/crash",
-  "Lucky Dice": "/game/dice",
-  "Golden Dice": "/game/dice",
-  "Dice Roll": "/game/dice",
-  "Dice Duel": "/game/dice",
-  "Mines Gold": "/game/mines",
-  "Mine Strike": "/game/mines",
+  // Crash games
+  "Aviator": "/game/crash", "Crash Rocket": "/game/crash", "Speed Crash": "/game/crash",
+  "JetX": "/game/crash", "Spaceman": "/game/crash", "Balloon": "/game/crash",
+  "Lucky Crumbling": "/game/crash", "Cappadocia": "/game/crash", "Hi-Lo Crash": "/game/crash", "Limbo": "/game/crash",
+  // Dice games
+  "Lucky Dice": "/game/dice", "Golden Dice": "/game/dice", "Dice Roll": "/game/dice",
+  "Dice Duel": "/game/dice", "Fire Joker": "/game/dice", "Sic Bo": "/game/dice", "Fan Tan": "/game/dice",
+  // Mines games
+  "Mines Gold": "/game/mines", "Mine Strike": "/game/mines", "Treasure Mine": "/game/mines",
+  // Wheel games
+  "Fortune Wheel": "/game/wheel", "Mega Wheel": "/game/wheel", "Crazy Time": "/game/wheel",
+  "Dream Catcher": "/game/wheel", "Monopoly Live": "/game/wheel", "Spin Wheel": "/game/wheel",
+  "Crystal Ball": "/game/wheel", "Mega Fortune": "/game/wheel",
+  // Plinko games
+  "Plinko Ball": "/game/plinko",
+  // Tower games
+  "Tower Rush": "/game/tower", "Gonzo's Quest": "/game/tower", "Rise of Merlin": "/game/tower", "Arabian Nights": "/game/tower",
+  // Keno games
+  "Keno Classic": "/game/keno", "Lucky Leprechaun": "/game/keno",
+  // Slots → wheel (slot-like spin)
+  "Burning Hot": "/game/wheel", "Lucky Slot 777": "/game/wheel", "Fruit Bonanza": "/game/wheel",
+  "Starburst": "/game/wheel", "Jackpot 6000": "/game/wheel", "Sweet Bonanza": "/game/wheel",
+  "Gates of Olympus": "/game/wheel", "Book of Ra": "/game/wheel", "Mega Moolah": "/game/wheel",
+  "Wolf Gold": "/game/wheel", "Dead or Alive": "/game/wheel", "Reactoonz": "/game/wheel",
+  "Legacy of Dead": "/game/wheel", "Razor Shark": "/game/wheel", "Jammin Jars": "/game/wheel",
+  "Big Bass Bonanza": "/game/wheel", "Eye of Horus": "/game/wheel",
+  // Live casino → wheel/dice
+  "Lightning Roulette": "/game/wheel", "Live Roulette": "/game/wheel",
+  "Auto Roulette": "/game/wheel", "Instant Roulette": "/game/wheel",
+  "Baccarat VIP": "/game/dice", "Speed Baccarat": "/game/dice", "Lightning Baccarat": "/game/dice",
+  "Live Poker": "/game/dice", "Casino Hold'em": "/game/dice",
+  // Card games → dice
+  "Hi-Lo Card": "/game/dice", "Andar Bahar": "/game/dice", "Teen Patti": "/game/dice",
+  "Texas Poker": "/game/dice", "3 Card Poker": "/game/dice", "Brag Card": "/game/dice",
+  "Red Dog": "/game/dice", "Pai Gow": "/game/dice", "War Card": "/game/dice",
+  "Punto Banco": "/game/dice", "Caribbean Stud": "/game/dice", "Solitaire Bet": "/game/dice",
+  "Blackjack VIP": "/game/dice", "Dragon Tiger": "/game/dice",
+  // Fishing → mines
+  "Golden Fish": "/game/mines", "Fishing War": "/game/mines", "Ocean King": "/game/mines",
+  "Mega Fishing": "/game/mines", "All Star Fishing": "/game/mines", "Dragon Fishing": "/game/mines",
+  "Treasure Fishing": "/game/mines", "Cai Shen Fishing": "/game/mines", "Shark Hunt": "/game/mines", "Fish Hunt Pro": "/game/mines",
+  // Sports → crash
+  "Football Bet": "/game/crash", "Cricket Bet": "/game/crash", "Kabaddi Bet": "/game/crash",
+  "Basketball Live": "/game/crash", "Tennis Match": "/game/crash", "IPL Betting": "/game/crash",
+  "BPL Live": "/game/crash", "Horse Racing": "/game/crash", "E-Sports DOTA": "/game/crash", "Boxing Bet": "/game/crash",
+  "Football Studio": "/game/crash",
+  // Popular → various
+  "Hall of Gods": "/game/tower", "Divine Fortune": "/game/wheel", "Pharaoh Gold": "/game/tower",
 };
 
 const GameCard = ({ name, image, provider, maxBet, index }: GameCardProps) => {
