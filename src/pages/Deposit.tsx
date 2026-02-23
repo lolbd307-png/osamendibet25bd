@@ -10,9 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const paymentMethods = [
-  { id: "bkash", name: "বিকাশ", color: "bg-[hsl(330,80%,45%)]", number: "01XXXXXXXXX", logo: "b" },
-  { id: "nagad", name: "নগদ", color: "bg-[hsl(25,90%,50%)]", number: "01XXXXXXXXX", logo: "N" },
-  { id: "rocket", name: "রকেট", color: "bg-[hsl(270,60%,45%)]", number: "01XXXXXXXXX", logo: "R" },
+  { id: "bkash", name: "বিকাশ", color: "bg-[hsl(330,80%,45%)]", number: "01648946140", logo: "b" },
+  { id: "nagad", name: "নগদ", color: "bg-[hsl(25,90%,50%)]", number: "01648946140", logo: "N" },
+  { id: "rocket", name: "রকেট", color: "bg-[hsl(270,60%,45%)]", number: "01648946140", logo: "R" },
 ];
 
 const amounts = [500, 1000, 2000, 5000, 10000, 20000];
