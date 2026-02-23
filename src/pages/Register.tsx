@@ -36,9 +36,7 @@ const Register = () => {
     if (error) {
       toast.error(error.message || "নিবন্ধন ব্যর্থ হয়েছে");
     } else {
-      // If referral code provided, save it after profile is created
       if (form.referral.trim()) {
-        // Will be linked on first login when profile exists
         setTimeout(async () => {
           try {
             const { data: session } = await (await import("@/integrations/supabase/client")).supabase.auth.getSession();
@@ -51,8 +49,8 @@ const Register = () => {
           } catch {}
         }, 2000);
       }
-      toast.success("নিবন্ধন সফল! ইমেইল ভেরিফাই করুন।");
-      navigate("/login");
+      toast.success("নিবন্ধন সফল! স্বাগতম!");
+      navigate("/");
     }
   };
 
