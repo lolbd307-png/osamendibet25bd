@@ -60,6 +60,10 @@ export default {
           green: "hsl(var(--neon-green))",
           red: "hsl(var(--neon-red))",
         },
+        teal: {
+          DEFAULT: "hsl(var(--teal))",
+          light: "hsl(var(--teal-light))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
