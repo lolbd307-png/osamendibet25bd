@@ -18,6 +18,7 @@ import GameWheel from "./pages/GameWheel";
 import GamePlinko from "./pages/GamePlinko";
 import GameTower from "./pages/GameTower";
 import GameKeno from "./pages/GameKeno";
+import SlotsPage from "./pages/SlotsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/game/plinko" element={<GamePlinko />} />
             <Route path="/game/tower" element={<GameTower />} />
             <Route path="/game/keno" element={<GameKeno />} />
+            <Route path="/slots" element={<SlotsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
